@@ -1,0 +1,25 @@
+{
+  "name": "v61b",
+  "version": "1.0.0",
+  "description": "## front/",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "debug": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Laged/Vuoro6-1b.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Laged/Vuoro6-1b/issues"
+  },
+  "homepage": "https://github.com/Laged/Vuoro6-1b#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket-io": "0.0.0",
+    "socket.io": "^1.5.1"
+  }
+}
