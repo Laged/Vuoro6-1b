@@ -6,9 +6,10 @@
   <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
   <script type="text/javascript">
   var socket = io();
+  var currentComment = "Ask me about parking tickets.";
   socket.on('connect', function(data) {
     console.log('Websocket connected');
-    /* THX artemgoncharuk/b31b6a656c954a2866e8 */
+    /* THX to artemgoncharuk/b31b6a656c954a2866e8 for API.ai integration guide*/
     var accessToken = "ed4a5dacb5e6490abb002a4ff4a8cfce";
     var baseUrl = "https://api.api.ai/v1/";
     $(document).ready(function() {
@@ -63,6 +64,7 @@
     }
     function updateRec() {
       $("#rec").text(recognition ? "Stop" : "Speak");
+      $("#comment").text(recognition ? "I'm listening..." : currentComment)
     }
     function send() {
       var text = $("#input").val();
@@ -88,21 +90,42 @@
       setResponse("Loading...");
     }
     function setResponse(data) {
-      var text = JSON.stringify(data, undefined, 2);
-      if (data["result"]) {
-        var results = data["result"];
-        if (results["parameters"]) {
-          var timeRange = results["parameters"]["date-period"];
+      //Ask for data range stuff from the backend
+      var result = data["result"];
+      if (result) {
+        //Update response
+        var fulfillment = result["fulfillment"];
+        if (fulfillment) {
+          var speech = fulfillment["speech"];
+          if (speech) {
+            currentComment = speech;
+            $("#comment").text(currentComment);
+          }
+        }
+        //Update time range
+        var params = result["parameters"];
+        if (params) {
+          var timeRange = params["date-period"];
           if (timeRange) {
-            console.log('Request: ', timeRange);
             socket.emit('request', timeRange);
           }
         }
-        $("#response").text(text);
+        //TODO: Update visualization with the data
       }
+      //Update debug response
+      var text = JSON.stringify(data, undefined, 2);
+      $("#response").text(text);
     }
+
+    function setContext(data) {
+      //Debug context
+      var text = JSON.stringify(data, undefined, 2);
+      $("#context").text(text);
+    }
+
     socket.on('response', function (data) {
       console.log('Response: ', data);
+      setContext(data);
     });
   });
   console.log('Speech recognition loaded');
@@ -113,12 +136,20 @@
   input { width: 400px; }
   button { width: 50px; }
   textarea { width: 100%; }
+  #debugArea { border: 1px solid black; width: 100%; }
   </style>
 </head>
 <body>
   <div>
     <input id="input" type="text"> <button id="rec">Speak</button>
-    <br>Response<br> <textarea id="response" cols="40" rows="20"></textarea>
+    <p id="comment">Ask me about parking tickets.</p>
+    <div id="debugArea">
+      <h4>DEBUG</h4>
+      <p>Current context</p>
+      <textarea id="context" cols="40" rows="20"></textarea>
+      <p>Speech to text</p>
+      <textarea id="response" cols="40" rows="20"></textarea>
+    </div>
   </div>
 </body>
 </html>
