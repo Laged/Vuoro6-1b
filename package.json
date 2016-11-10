@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Laged/Vuoro6-1b#readme",
   "dependencies": {
     "express": "^4.14.0",
+    "massive": "^2.5.0",
     "moment": "^2.15.2",
     "socket.io": "^1.5.1"
   }

@@ -107,6 +107,7 @@
         if (params) {
           var timeRange = params["date-period"];
           if (timeRange) {
+            console.log("Request:\n", timeRange);
             socket.emit('request', timeRange);
           }
         }
@@ -123,32 +124,53 @@
       $("#context").text(text);
     }
 
+    //Valid context reply from server
     socket.on('response', function (data) {
       console.log('Response: ', data);
       setContext(data);
+    });
+    //Valid data reply from server
+    socket.on('data', function(data) {
+      //TODO: VISUALIZE DATA HERE
+      //Voi pojat tätä lagia jos tän ottaa mukaan :-D
+      //data.forEach( r => console.log(r["area"]));
+
+      //Update elements with data
+      $("#itemCount").text(data.length);
+      $("#comment").text("Ask me about parking tickets.");
+      $("#data").text(JSON.stringify(data, undefined, 2).substring(0, 2000) + "...\nETC...");
+      console.log('Data: ', data);
+    });
+    //Error from server
+    socket.on('error', function(data) {
+      console.log('error: ', data);
     });
   });
   console.log('Speech recognition loaded');
   </script>
   <style type="text/css">
-  body { width: 500px; margin: 0 auto; text-align: center; margin-top: 20px; }
+  body { width: 80%; margin: 0 auto; text-align: center; margin-top: 20px; }
   div {  position: absolute; }
   input { width: 400px; }
   button { width: 50px; }
   textarea { width: 100%; }
   #debugArea { border: 1px solid black; width: 100%; }
+  #container { with: 100%; position: relative; }
   </style>
 </head>
 <body>
-  <div>
+  <div id="container">
     <input id="input" type="text"> <button id="rec">Speak</button>
     <p id="comment">Ask me about parking tickets.</p>
     <div id="debugArea">
       <h4>DEBUG</h4>
-      <p>Current context</p>
-      <textarea id="context" cols="40" rows="20"></textarea>
+      <p>Found items: <span id="itemCount">0</span></p>
       <p>Speech to text</p>
       <textarea id="response" cols="40" rows="20"></textarea>
+      <p>Current context</p>
+      <textarea id="context" cols="40" rows="20"></textarea>
+      <p>Current data (2000 chars)</p>
+      <textarea id="data" cols="40" rows="20"></textarea>
     </div>
   </div>
 </body>
