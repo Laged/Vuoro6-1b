@@ -4,6 +4,15 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+
+
+  <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+  <script src="webgl-heatmap.js"></script>
+  <script src="webgl-heatmap-leaflet.min.js"></script>
+
+
+
   <script type="text/javascript">
   var socket = io();
   var currentComment = "Ask me about parking tickets.";
@@ -22,7 +31,44 @@
       $("#rec").click(function(event) {
         switchRecognition();
       });
-    });
+
+      /* Map stuff */
+
+      var map = L.map('mapid', {
+    center: [60.1645628, 24.9255773],
+    zoom: 12,
+    minZoom: 8,
+});
+
+
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+          maxZoom: 18,
+          id: 'lakkapemmi.23o6c2f2',
+          accessToken: 'pk.eyJ1IjoibGFra2FwZW1taSIsImEiOiJjaXZoMnU0ZHkwMDhzMm9ueXdlNjB0Zm80In0.2nCA9txTsf_IbaDKHgQI4g'
+      }).addTo(map);
+
+map.scrollWheelZoom.disable();
+
+L.control.scale().addTo(map);
+
+//custom size for this example, and autoresize because map style has a percentage width
+var heatmap = L.webGLHeatmap({
+    size: 2,
+    units: 'px',
+    radius:5,
+    // alphaRange: 0.95,
+    opacity: 0.5
+
+});
+
+var dataPoints = [];
+
+heatmap.setData(dataPoints);
+map.addLayer(heatmap);
+
+
+/* voice recognition */
     var recognition;
     function startRecognition() {
       recognition = new webkitSpeechRecognition();
@@ -139,7 +185,21 @@
       $("#itemCount").text(data.length);
       $("#comment").text("Ask me about parking tickets.");
       $("#data").text(JSON.stringify(data, undefined, 2).substring(0, 2000) + "...\nETC...");
+
+      $()
       console.log('Data: ', data);
+
+      dataPoints = [];
+
+      for (var i = 0; i < data.length; i++) {
+        dataPoints.push([data[i].y, data[i].x]);
+      }
+
+      console.log('Data loaded from server. Now plotting..');
+      /* update map with new data */
+      heatmap.setData(dataPoints);
+
+
     });
     //Error from server
     socket.on('error', function(data) {
@@ -147,6 +207,9 @@
     });
   });
   console.log('Speech recognition loaded');
+
+});// /ready
+
   </script>
   <style type="text/css">
   body { width: 80%; margin: 0 auto; text-align: center; margin-top: 20px; }
@@ -156,6 +219,19 @@
   textarea { width: 100%; }
   #debugArea { border: 1px solid black; width: 100%; }
   #container { with: 100%; position: relative; }
+  canvas{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    color: black;
+    overflow: hidden;
+
+  }
+  #mapid{
+    width: 100%;
+    height: 800px;
+    margin-bottom: 100px;
+  }
   </style>
 </head>
 <body>
@@ -171,6 +247,11 @@
       <textarea id="context" cols="40" rows="20"></textarea>
       <p>Current data (2000 chars)</p>
       <textarea id="data" cols="40" rows="20"></textarea>
+      <p>Current map</p>
+      <div id="mapid"></div>
+      <a id="options"></a><!-- nees empty options div -->
+
+
     </div>
   </div>
 </body>
