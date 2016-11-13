@@ -21,7 +21,7 @@ module.exports = {
   },
   getData(context, callback) {
     console.log('getData ', context);
-    db.tickets.find({'year>=':context.fromYear, 'year<=':context.toYear}, (err, res) => {
+    db.tickets.find({'year>=':context.fromYear, 'year<=':context.toYear, 'month>=':context.fromMonth, 'month<=':context.toMonth}, (err, res) => {
       if (err) callback(err, null);
       console.log(res.length + " items found");
       callback(null, res);
