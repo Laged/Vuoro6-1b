@@ -5,7 +5,7 @@ const db = massive.connectSync({connectionString:connectionString});
 module.exports = {
   debug(callback) {
     console.log('debug');
-    db.run('SELECT * FROM tickets;', (err, res) => {
+    db.run('SELECT * FROM ticketsdata;', (err, res) => {
       if (err) callback(err, null);
       console.log(res.length + " items in db");
       callback(null, res);
@@ -13,7 +13,7 @@ module.exports = {
   },
   getCount(callback) {
     console.log('getCount');
-    db.tickets.count({}, (err, res) => {
+    db.ticketdata.count({}, (err, res) => {
       if (err) callback(err, null);
       console.log(res.length + " items in db");
       callback(null, res);
@@ -21,7 +21,7 @@ module.exports = {
   },
   getData(context, callback) {
     console.log('getData ', context);
-    db.tickets.find({'year>=':context.fromYear, 'year<=':context.toYear, 'month>=':context.fromMonth, 'month<=':context.toMonth}, (err, res) => {
+    db.ticketdata.find({'year>=':context.fromYear, 'year<=':context.toYear, 'month>=':context.fromMonth, 'month<=':context.toMonth}, (err, res) => {
       if (err) callback(err, null);
       console.log(res.length + " items found");
       callback(null, res);
