@@ -149,7 +149,24 @@ map.addLayer(heatmap);
     }
 
     function moveMap(direction) {
-      console.log("I SHOULDE MOVE TOWARDS " + direction);
+      switch(direction) {
+        case "west":
+          console.log("west");
+          map.panBy([-300, 0]);
+          break;
+        case "east":
+          console.log("east");
+          map.panBy([300, 0]);
+          break;
+        case "south":
+          console.log("south");
+          map.panBy([0, 300]);
+          break;
+        case "north":
+          console.log("north");
+          map.panBy([0, -300]);
+          break;
+      }
     }
 
     function setResponse(data) {
