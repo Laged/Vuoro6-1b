@@ -22,6 +22,11 @@
     var accessToken = "ed4a5dacb5e6490abb002a4ff4a8cfce";
     var baseUrl = "https://api.api.ai/v1/";
     $(document).ready(function() {
+
+      $('#debugbtn').click(function () {
+        $('#debugArea').toggle();
+      });
+
       $("#input").keypress(function(event) {
         if (event.which == 13) {
           event.preventDefault();
@@ -34,11 +39,11 @@
 
       /* Map stuff */
 
-      var map = L.map('mapid', {
-    center: [60.2072059,24.9897336],
-    zoom: 12,
-    minZoom: 8,
-});
+    var map = L.map('mapid', {
+        center: [60.2072059,24.9897336],
+        zoom: 12,
+        minZoom: 8,
+    });
 
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -204,11 +209,8 @@ map.addLayer(heatmap);
             if (direction) moveMap(direction);
           }
           //Check for move map
-
         }
 
-
-        //TODO: Update visualization with the data
       }
       //Update debug response
       var text = JSON.stringify(data, undefined, 2);
@@ -264,8 +266,10 @@ map.addLayer(heatmap);
   button { width: 50px; }
   textarea { width: 100%; }
   #debugArea {
-    width: 33%;
-    display: block;
+    width: 25%;
+    display: none;
+    position: fixed;
+    right: 20;
   }
   #container { width: 80%; display: block; margin: auto; }
   canvas{
@@ -286,14 +290,17 @@ map.addLayer(heatmap);
   }
   .speak-field{
     position: fixed;
-    bottom: 40px;
-    left:40%;
+    bottom: 80px;
+    left:50%;
+    width:500px;
+    margin-left: -250px;
     z-index: 2;
   }
   input {
     padding: 10px;
   }
   button {
+    margin: 20px;
     padding: 12px;
     width: 100px;
   }
@@ -304,7 +311,7 @@ map.addLayer(heatmap);
   <a id="options"></a><!-- nees empty options div -->
 
   <div class="speak-field">
-    <input id="input" type="text"> <button id="rec">Speak</button>
+    <input id="input" type="text"> <button id="rec">Speak</button> <button id="debugbtn">Debug</button>
   </div>
 
   <div class="container">
@@ -317,11 +324,11 @@ map.addLayer(heatmap);
       <h4>DEBUG</h4>
       <p>Found items: <span id="itemCount">0</span></p>
       <p>Speech to text</p>
-      <textarea id="response" cols="40" rows="20"></textarea>
+      <textarea id="response" cols="20" rows="10"></textarea>
       <p>Current context</p>
-      <textarea id="context" cols="40" rows="20"></textarea>
+      <textarea id="context" cols="20" rows="10"></textarea>
       <p>Current data (2000 chars)</p>
-      <textarea id="data" cols="40" rows="20"></textarea>
+      <textarea id="data" cols="20" rows="10"></textarea>
       <p>Current map</p>
     </div>
   </div>
