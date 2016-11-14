@@ -141,11 +141,11 @@ map.addLayer(heatmap);
 
     //MANIPULATE MAP WITH NPL
     function zoomIn() {
-      console.log("I SHOULD ZOOM IN");
+      map.setZoom(map.getZoom()+1);
     }
 
     function zoomOut() {
-      console.log("I SHOULD ZOOM OUT");
+      map.setZoom(map.getZoom()-1);
     }
 
     function moveMap(direction) {
