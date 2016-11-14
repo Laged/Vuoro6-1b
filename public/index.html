@@ -57,15 +57,16 @@ var heatmap = L.webGLHeatmap({
     size: 2,
     units: 'px',
     radius: 2,
-    // alphaRange: 0.95,
     opacity: 0.5,
-    multiply: 0.0000012
-
+    // gradientTexture:'deep-sea-gradient.png',
+    intensityToAlpha:true,
 });
 
 var dataPoints = [];
 
 heatmap.setData(dataPoints);
+
+
 map.addLayer(heatmap);
 
 
@@ -195,7 +196,7 @@ map.addLayer(heatmap);
       console.log('Data loaded from server. Now plotting..');
       /* update map with new data */
       heatmap.setData(dataPoints);
-
+      heatmap.multiply(0.01);
 
     });
     //Error from server
@@ -239,6 +240,13 @@ map.addLayer(heatmap);
     bottom: 40px;
     left:40%;
     z-index: 2;
+  }
+  input {
+    padding: 10px;
+  }
+  button {
+    padding: 12px;
+    width: 100px;
   }
   </style>
 </head>
