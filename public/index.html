@@ -127,6 +127,7 @@ map.addLayer(heatmap);
         },
         data: JSON.stringify({ query: text, lang: "en" }),
         success: function(data) {
+          console.log('NLP: ', data);
           setResponse(data);
         },
         error: function() {
@@ -136,6 +137,17 @@ map.addLayer(heatmap);
 
       setResponse("Loading...");
     }
+
+    //ZOOMING WITH NPL
+
+    function zoomIn() {
+      console.log("I SHOULD ZOOM IN");
+    }
+
+    function zoomOut() {
+      console.log("I SHOULD ZOOM OUT");
+    }
+
     function setResponse(data) {
       //Ask for data range stuff from the backend
       var result = data["result"];
@@ -158,6 +170,17 @@ map.addLayer(heatmap);
             socket.emit('request', timeRange);
           }
         }
+        //Check for zoom
+        var metaData = result["metadata"];
+        if (metaData) {
+          var intentName = metaData["intentName"];
+          if (intentName === "zoom_in") {
+            zoomIn();
+          } else if (intentName === "zoom_out") {
+            zoomOut();
+          }
+        }
+
         //TODO: Update visualization with the data
       }
       //Update debug response
