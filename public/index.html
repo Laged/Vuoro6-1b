@@ -138,14 +138,17 @@ map.addLayer(heatmap);
       setResponse("Loading...");
     }
 
-    //ZOOMING WITH NPL
-
+    //MANIPULATE MAP WITH NPL
     function zoomIn() {
       console.log("I SHOULD ZOOM IN");
     }
 
     function zoomOut() {
       console.log("I SHOULD ZOOM OUT");
+    }
+
+    function moveMap(direction) {
+      console.log("I SHOULDE MOVE TOWARDS " + direction);
     }
 
     function setResponse(data) {
@@ -166,20 +169,26 @@ map.addLayer(heatmap);
         if (params) {
           var timeRange = params["date-period"];
           if (timeRange) {
-            console.log("Request:\n", timeRange);
             socket.emit('request', timeRange);
           }
         }
-        //Check for zoom
+        //Check for meta data intents
         var metaData = result["metadata"];
         if (metaData) {
+          //Check for zoom in/out
           var intentName = metaData["intentName"];
           if (intentName === "zoom_in") {
             zoomIn();
           } else if (intentName === "zoom_out") {
             zoomOut();
+          } else if (params && intentName === "move_map") {
+            var direction = params["direction"];
+            if (direction) moveMap(direction);
           }
+          //Check for move map
+
         }
+
 
         //TODO: Update visualization with the data
       }
