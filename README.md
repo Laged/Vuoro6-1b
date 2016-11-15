@@ -1,9 +1,10 @@
 # Helsinki parking tickets visualisation 2014-2016
 
-CS-1190: Vuorovaikutustekniikan studio, harjoitus 1B
-Ryhmä 6: Pekka Lammi, Matti Parkkila, Aliisa Pietilä, Vesa Vahermaa
+CS-1190: Vuorovaikutustekniikan studio, harjoitus 1B  
+Ryhmä 6: Pekka Lammi, Matti Parkkila, Aliisa Pietilä, Vesa Vahermaa  
 Pysäköintivirheet Helsingin kartalla
 
+![Description](/description.png)
 
 Halusimme tehtävässä testata sitä, miten ääniohjaus toimisi datan visualisoinnin apukeinona esimerkiksi kokoustilanteessa, jossa vaikkapa presiksen yhteydessä voisi olla helpompi ohjata visualisaatiota äänellä kuin tietokoneen näppäimistöltä. Tavoitteenamme oli myös toteuttaa jokin sellainen visualisaatio, joka taipuisi helposti myös muun datan käsittelyyn kuin sen, mitä tässä kyseissä harjoituksessa käytämme. Valitsimmekin aiheeksi monikäyttöisen aikasarja-aineiston visualisoinnin muokkauksen. 
 
